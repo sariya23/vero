@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- GitHub Actions for every push (`.github/worflows/main.yml`) and for release only (`.github/worflows/release.yml`);
+
 - New public checker functions: `check.assert.AlmostEqualTime` and `check.require.AlmostEqualTime`.
 These functions compare two time values with a specified precision and either fail immediately or perform a soft assertion.
 
