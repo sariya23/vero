@@ -1,4 +1,8 @@
-# probatigo
+probatigo
+===========
+
+> [!NOTE]
+> Probatigo is under active development. Before the stable v1.x.x release, there may be many updates.
 
 Probatigo provides testing utilities and test data generation.
 
