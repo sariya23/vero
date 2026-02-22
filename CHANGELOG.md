@@ -8,7 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- New public functions: `check.assert.AlmostEqualTime` and `check.require.AlmostEqualTime`.
-These functions compare two time values with a specified precision.
+- New public checker functions: `check.assert.AlmostEqualTime` and `check.require.AlmostEqualTime`.
+These functions compare two time values with a specified precision and either fail immediately or perform a soft assertion.
+
+- Internal function `AlmostEqualTime` - contains the comparison logic used by the test public functions.
+
+- Internal function `ShowDiffAlmostEqualTime` - displays the two time values used in `AlmostEqualTime`.
 
 - New packages: `check.assert` and `check.require`.
