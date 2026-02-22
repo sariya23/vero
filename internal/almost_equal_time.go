@@ -2,9 +2,9 @@ package internal
 
 import "time"
 
-func AlmostEqualTime(a, b time.Time, precision time.Duration) bool {
-	if a.After(b) {
-		return a.Sub(b) < precision
+func AlmostEqualTime(time1, time2 time.Time, precision time.Duration) bool {
+	if time1.After(time2) {
+		return time1.Sub(time2) < precision
 	}
-	return b.Sub(a) < precision
+	return time2.Sub(time1) < precision
 }
