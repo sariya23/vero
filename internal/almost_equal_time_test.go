@@ -42,12 +42,12 @@ func TestAlmostEqualTime(t *testing.T) {
 			expected:  false,
 		},
 	}
-	for _, c := range cases {
-		t.Run(c.name, func(t *testing.T) {
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			got := AlmostEqualTime(c.time1, c.time2, c.precision)
-			if got != c.expected {
-				t.Errorf("got %v, want %v", got, c.expected)
+			got := AlmostEqualTime(tc.time1, tc.time2, tc.precision)
+			if got != tc.expected {
+				t.Errorf("got %v, want %v", got, tc.expected)
 			}
 		})
 	}
