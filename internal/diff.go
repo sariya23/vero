@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// ShowDiffAlmostEqualTime formats time1, time2, and the precision for diff output.
 func ShowDiffAlmostEqualTime(time1, time2 time.Time, precision time.Duration) string {
 	showBuilder := "\ntime%d: year=%v, month=%v, day=%v, hour=%v, min=%v, second=%v, nanosecond=%v, tzinfo=(name=%v offset=%v)"
 	time1Zone, time1Offset := time1.Zone()

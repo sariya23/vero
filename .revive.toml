@@ -1,0 +1,28 @@
+# Стандартная конфигурация Revive (средняя строгость)
+ignoreGeneratedHeader = true
+severity = "warning"
+confidence = 0.8
+
+[rule.blank-imports]
+[rule.error-return]
+[rule.error-strings]
+[rule.exported]
+[rule.indent-error-flow]
+[rule.var-naming]
+[rule.receiver-naming]
+[rule.unexported-naming]
+[rule.error-naming]
+[rule.if-return]
+[rule.increment-decrement]
+[rule.range-val-address]
+[rule.range-val-in-closure]
+[rule.unhandled-error]
+[rule.redefines-builtin-id]
+[rule.unused-parameter]
+[rule.unused-receiver]
+[rule.waitgroup-by-value]
+[rule.context-as-argument]
+[rule.dot-imports]
+[rule.duplicated-imports]
+[rule.superfluous-else]
+[rule.unreachable-code]
