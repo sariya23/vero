@@ -7,6 +7,12 @@ import (
 
 func TestAlmostEqualTime(t *testing.T) {
 	t.Parallel()
+	timeNow := time.Now()
+	loc, err := time.LoadLocation("America/Los_Angeles")
+	if err != nil {
+		t.Fatal(err)
+	}
+	timeNotUTC := timeNow.In(loc)
 	cases := []struct {
 		name         string
 		time1, time2 time.Time
@@ -38,6 +44,13 @@ func TestAlmostEqualTime(t *testing.T) {
 			name:      "time1 and time2 is not almost equal",
 			time1:     time.Date(2020, time.April, 15, 12, 20, 0, 0, time.UTC),
 			time2:     time.Date(2020, time.April, 15, 12, 21, 0, 0, time.UTC),
+			precision: time.Second * 20,
+			expected:  false,
+		},
+		{
+			name:      "function work with location (ignore it)",
+			time1:     time.Now().UTC(),
+			time2:     timeNotUTC,
 			precision: time.Second * 20,
 			expected:  false,
 		},
