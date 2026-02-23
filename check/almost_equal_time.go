@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sariya23/probatigo/internal"
+	"github.com/sariya23/vero/internal"
 )
 
 // AssertAlmostEqualTime is a function that compares two time values, time1 and time2,
