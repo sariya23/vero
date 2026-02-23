@@ -5,8 +5,6 @@ import (
 	"testing"
 )
 
-const ANY_INT = -1
-
 func TestChoice_EmptyCollection(t *testing.T) {
 	t.Parallel()
 	col := []int{}
