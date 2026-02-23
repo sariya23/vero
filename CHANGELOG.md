@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
+## [0.1.1] - 2026-02-23
+
+### Changed
+
+- Fixed the condition in `assert.AlmostEqualTime` and `require.AlmostEqualTime`: previously, when the times were equal, the checker failed due to an inverted boolean flag.
+
+### Added
+
+- Added tests for the public checker
+
 ## [0.1.0] - 2026-02-22
 
 ### Added
