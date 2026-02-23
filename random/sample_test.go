@@ -33,6 +33,12 @@ func TestSample(t *testing.T) {
 			expectedLen: 3,
 			mustPanic:   true,
 		},
+		{
+			name:        "nil slice",
+			collection:  nil,
+			k:           10,
+			expectedLen: 0,
+		},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

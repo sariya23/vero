@@ -1,7 +1,6 @@
 package random
 
 import (
-	"fmt"
 	mrand "math/rand/v2"
 )
 
@@ -15,7 +14,7 @@ import (
 // Sample panics if k <= 0.
 func Sample[T any](collection []T, k int) []T {
 	if k <= 0 {
-		panic(fmt.Sprintf("'k' argument must be greater than zero"))
+		panic("'k' argument must be greater than zero")
 	}
 
 	if len(collection) == k {
