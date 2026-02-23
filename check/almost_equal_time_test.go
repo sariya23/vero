@@ -8,6 +8,12 @@ import (
 
 func TestAssertAlmostEqualTime(t *testing.T) {
 	t.Parallel()
+	timeNow := time.Now()
+	loc, err := time.LoadLocation("America/Los_Angeles")
+	if err != nil {
+		t.Fatal(err)
+	}
+	timeNotUTC := timeNow.In(loc)
 	cases := []struct {
 		name         string
 		time1, time2 time.Time
@@ -15,17 +21,45 @@ func TestAssertAlmostEqualTime(t *testing.T) {
 		expected     bool
 	}{
 		{
-			name:      "time is almost equal",
+			name:      "time1 is equal to time2",
+			time1:     time.Date(2020, time.April, 15, 0, 0, 0, 0, time.UTC),
+			time2:     time.Date(2020, time.April, 15, 0, 0, 0, 0, time.UTC),
+			precision: time.Second,
+			expected:  true,
+		},
+		{
+			name:      "time1 < time2 and those is equal",
 			time1:     time.Date(2020, time.April, 15, 12, 0, 0, 0, time.UTC),
 			time2:     time.Date(2020, time.April, 15, 13, 0, 0, 0, time.UTC),
 			precision: time.Hour * 2,
 			expected:  true,
 		},
 		{
-			name:      "time is not almost equal",
+			name:      "time1 < time2 and those is not equal",
 			time1:     time.Date(2020, time.April, 15, 12, 0, 0, 0, time.UTC),
 			time2:     time.Date(2020, time.April, 15, 13, 0, 0, 0, time.UTC),
-			precision: time.Second * 2,
+			precision: time.Minute * 30,
+			expected:  false,
+		},
+		{
+			name:      "time1 > time2 and those is equal",
+			time1:     time.Date(2020, time.April, 15, 13, 0, 0, 0, time.UTC),
+			time2:     time.Date(2020, time.April, 15, 12, 0, 0, 0, time.UTC),
+			precision: time.Hour * 2,
+			expected:  true,
+		},
+		{
+			name:      "time1 > time2 and those is not equal",
+			time1:     time.Date(2020, time.April, 15, 13, 0, 0, 0, time.UTC),
+			time2:     time.Date(2020, time.April, 15, 12, 0, 0, 0, time.UTC),
+			precision: time.Minute * 30,
+			expected:  false,
+		},
+		{
+			name:      "the function ignores location information and calculates the difference in UTC",
+			time1:     time.Now().UTC(),
+			time2:     timeNotUTC,
+			precision: time.Second * 20,
 			expected:  false,
 		},
 	}
