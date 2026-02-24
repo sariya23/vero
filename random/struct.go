@@ -85,5 +85,5 @@ func buildBoolRules(tagString string) rules.BoolRules {
 }
 
 func validRule(pair []string) bool {
-	return len(pair) != 2 || pair[0] == "" || pair[1] == ""
+	return !(len(pair) != 2 || pair[0] == "" || pair[1] == "")
 }
