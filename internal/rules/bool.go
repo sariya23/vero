@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	ErrUnknowBoolRuleName  = errors.New("unknown rule name")
-	ErrUnknowBoolRuleValue = errors.New("unknown rule value")
+	ErrUnknowBoolRuleName  = errors.New("unknown bool rule name")
+	ErrUnknowBoolRuleValue = errors.New("unknown bool rule value")
 )
 
 type BoolRuleValue string
@@ -22,28 +22,25 @@ const (
 	Only BoolRuleName = "only"
 )
 
-type BoolRuleStructTag struct {
+type BoolRule struct {
 	Name  BoolRuleName
 	Value BoolRuleValue
 }
 
-func NewBoolRuleStructTag(name, value string) (BoolRuleStructTag, error) {
+func NewBoolRule(name, value string) (BoolRule, error) {
 	if !slices.Contains([]BoolRuleName{Only}, BoolRuleName(name)) {
-		return BoolRuleStructTag{}, ErrUnknowBoolRuleName
+		return BoolRule{}, ErrUnknowBoolRuleName
 	}
 	if !slices.Contains([]BoolRuleValue{OnlyTrue, OnlyFalse}, BoolRuleValue(value)) {
-		return BoolRuleStructTag{}, ErrUnknowBoolRuleValue
+		return BoolRule{}, ErrUnknowBoolRuleValue
 	}
-	return BoolRuleStructTag{Name: BoolRuleName(name), Value: BoolRuleValue(value)}, nil
+	return BoolRule{Name: BoolRuleName(name), Value: BoolRuleValue(value)}, nil
 }
 
-func GenerateBool(rule BoolRuleValue) bool {
-	switch rule {
-	case OnlyTrue:
-		return true
-	case OnlyFalse:
-		return false
-	default:
-		return rand.Bool()
-	}
+func GenerateBool(rules []BoolRule) (bool, error) {
+	return false, nil
+}
+
+func GenerateBoolWithoutRules() bool {
+	return rand.Bool()
 }

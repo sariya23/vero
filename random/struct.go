@@ -2,6 +2,9 @@ package random
 
 import (
 	"reflect"
+	"strings"
+
+	"github.com/sariya23/vero/internal/rules"
 )
 
 const TagName = "rules"
@@ -9,7 +12,7 @@ const TagName = "rules"
 // Struct...
 // TODO: добавить генерацию всех полей
 // TODO: вынести генерацию в internal
-func Struct(objPtr any) {
+func Struct(objPtr any) error {
 	value := reflect.ValueOf(objPtr)
 	if value.Kind() != reflect.Ptr {
 		panic("objPtr must be a pointer to struct")
@@ -19,10 +22,10 @@ func Struct(objPtr any) {
 		panic("objPtr must be a pointer to struct")
 	}
 
-	recursiveGenerateFillValue(value.Elem())
+	return recursiveGenerateFillValue(value.Elem())
 }
 
-func recursiveGenerateFillValue(structValue reflect.Value) {
+func recursiveGenerateFillValue(structValue reflect.Value) error {
 	for i := 0; i < structValue.NumField(); i++ {
 		field := structValue.Field(i)
 		if !field.CanSet() {
@@ -30,7 +33,21 @@ func recursiveGenerateFillValue(structValue reflect.Value) {
 		}
 		switch field.Type().Kind() {
 		case reflect.Bool:
-			field.Set(reflect.ValueOf(false))
+			tags := strings.Split(structValue.Type().Field(i).Tag.Get(TagName), ",")
+			boolRules := make([]rules.BoolRule, 0, len(tags))
+			for _, structTag := range tags {
+				pair := strings.Split(structTag, "=")
+				boolRule, err := rules.NewBoolRule(pair[0], pair[1])
+				if err != nil {
+					return err
+				}
+				boolRules = append(boolRules, boolRule)
+			}
+			generated, err := rules.GenerateBool(boolRules)
+			if err != nil {
+				return err
+			}
+			field.Set(reflect.ValueOf(generated))
 		case reflect.Int:
 			field.Set(reflect.ValueOf(8))
 		case reflect.Int8:
@@ -56,8 +73,12 @@ func recursiveGenerateFillValue(structValue reflect.Value) {
 		case reflect.Slice:
 		case reflect.String:
 		case reflect.Struct:
-			recursiveGenerateFillValue(field)
+			err := recursiveGenerateFillValue(field)
+			if err != nil {
+				return err
+			}
 		case reflect.UnsafePointer:
 		}
 	}
+	return nil
 }
