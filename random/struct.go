@@ -3,6 +3,8 @@ package random
 import "reflect"
 
 // Struct...
+// TODO: добавить генерацию всех полей
+// TODO: вынести генерацию в internal
 func Struct(objPtr any) {
 	value := reflect.ValueOf(objPtr)
 	if value.Kind() != reflect.Ptr {
