@@ -71,7 +71,7 @@ func buildBoolRules(tagString string) rules.BoolRules {
 	boolRules := make([]rules.BoolRule, 0, len(allRules))
 	for _, r := range allRules {
 		pair := strings.Split(r, "=")
-		if len(pair) != 2 || pair[0] == "" || pair[1] == "" {
+		if !validRule(pair) {
 			panic("invalid tag value")
 		}
 		boolRule, err := rules.NewBoolRule(pair[0], pair[1])
@@ -82,4 +82,8 @@ func buildBoolRules(tagString string) rules.BoolRules {
 	}
 
 	return rules.NewBoolRules(boolRules)
+}
+
+func validRule(pair []string) bool {
+	return len(pair) != 2 || pair[0] == "" || pair[1] == ""
 }
