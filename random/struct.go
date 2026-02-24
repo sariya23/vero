@@ -37,6 +37,9 @@ func recursiveGenerateFillValue(structValue reflect.Value) error {
 			boolRules := make([]rules.BoolRule, 0, len(tags))
 			for _, structTag := range tags {
 				pair := strings.Split(structTag, "=")
+				if len(pair) != 2 {
+					continue
+				}
 				boolRule, err := rules.NewBoolRule(pair[0], pair[1])
 				if err != nil {
 					return err

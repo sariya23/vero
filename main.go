@@ -7,7 +7,8 @@ import (
 )
 
 type S struct {
-	B bool `rules:"asd=qwe"`
+	B bool `rules:""`
+	Q bool
 }
 
 func main() {

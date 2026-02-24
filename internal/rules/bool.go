@@ -47,6 +47,9 @@ func NewBoolRules(rules []BoolRule) BoolRules {
 }
 
 func NewBoolRule(name, value string) (BoolRule, error) {
+	if name == "" || value == "" {
+		return BoolRule{}, nil
+	}
 	if !slices.Contains([]BoolRuleName{Only}, BoolRuleName(name)) {
 		return BoolRule{}, ErrUnknowBoolRuleName
 	}
