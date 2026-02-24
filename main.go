@@ -7,14 +7,14 @@ import (
 )
 
 type S struct {
-	A int
-	B bool `rules:"only=true"`
+	B bool `rules:"asd=qwe"`
 }
 
 func main() {
 	var s S
 
-	random.Struct(&s)
-	fmt.Println(s)
+	err := random.Struct(&s)
+
+	fmt.Println(err, s)
 
 }

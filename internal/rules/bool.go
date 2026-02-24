@@ -27,6 +27,25 @@ type BoolRule struct {
 	Value BoolRuleValue
 }
 
+type BoolRules struct {
+	OnlyTrue  *BoolRule
+	OnlyFalse *BoolRule
+}
+
+func NewBoolRules(rules []BoolRule) BoolRules {
+	var res BoolRules
+	for _, rule := range rules {
+		if rule.Name == Only {
+			if rule.Value == OnlyFalse {
+				res.OnlyFalse = &rule
+			} else if rule.Value == OnlyTrue {
+				res.OnlyTrue = &rule
+			}
+		}
+	}
+	return res
+}
+
 func NewBoolRule(name, value string) (BoolRule, error) {
 	if !slices.Contains([]BoolRuleName{Only}, BoolRuleName(name)) {
 		return BoolRule{}, ErrUnknowBoolRuleName
@@ -37,8 +56,17 @@ func NewBoolRule(name, value string) (BoolRule, error) {
 	return BoolRule{Name: BoolRuleName(name), Value: BoolRuleValue(value)}, nil
 }
 
-func GenerateBool(rules []BoolRule) (bool, error) {
-	return false, nil
+func GenerateBool(rules BoolRules) (bool, error) {
+	if rules.OnlyTrue != nil && rules.OnlyFalse != nil {
+		return GenerateBoolWithoutRules(), nil
+	}
+	if rules.OnlyTrue != nil {
+		return true, nil
+	}
+	if rules.OnlyFalse != nil {
+		return false, nil
+	}
+	return GenerateBoolWithoutRules(), nil
 }
 
 func GenerateBoolWithoutRules() bool {

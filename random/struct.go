@@ -43,7 +43,9 @@ func recursiveGenerateFillValue(structValue reflect.Value) error {
 				}
 				boolRules = append(boolRules, boolRule)
 			}
-			generated, err := rules.GenerateBool(boolRules)
+
+			boolRulesStruct := rules.NewBoolRules(boolRules)
+			generated, err := rules.GenerateBool(boolRulesStruct)
 			if err != nil {
 				return err
 			}
