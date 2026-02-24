@@ -59,17 +59,17 @@ func NewBoolRule(name, value string) (BoolRule, error) {
 	return BoolRule{Name: BoolRuleName(name), Value: BoolRuleValue(value)}, nil
 }
 
-func GenerateBool(rules BoolRules) (bool, error) {
+func GenerateBool(rules BoolRules) bool {
 	if rules.OnlyTrue != nil && rules.OnlyFalse != nil {
-		return GenerateBoolWithoutRules(), nil
+		return GenerateBoolWithoutRules()
 	}
 	if rules.OnlyTrue != nil {
-		return true, nil
+		return true
 	}
 	if rules.OnlyFalse != nil {
-		return false, nil
+		return false
 	}
-	return GenerateBoolWithoutRules(), nil
+	return GenerateBoolWithoutRules()
 }
 
 func GenerateBoolWithoutRules() bool {

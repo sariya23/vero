@@ -48,10 +48,7 @@ func recursiveGenerateFillValue(structValue reflect.Value) error {
 			}
 
 			boolRulesStruct := rules.NewBoolRules(boolRules)
-			generated, err := rules.GenerateBool(boolRulesStruct)
-			if err != nil {
-				return err
-			}
+			generated := rules.GenerateBool(boolRulesStruct)
 			field.Set(reflect.ValueOf(generated))
 		case reflect.Int:
 			field.Set(reflect.ValueOf(8))
