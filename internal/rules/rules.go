@@ -1,9 +1,11 @@
 package rules
 
-import "github.com/sariya23/vero/internal"
+import (
+	rand2 "github.com/sariya23/vero/internal/rand"
+)
 
-var rand *internal.RandSource
+var rand *rand2.RandSource
 
 func init() {
-	rand = internal.NewRandSource()
+	rand = rand2.NewRandSource()
 }
