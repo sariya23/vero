@@ -106,3 +106,19 @@ func (s *RandSource) Float64Range(min, max float64) float64 {
 	}
 	return min + s.r.Float64()*(max-min)
 }
+
+func (s *RandSource) Int() int     { return s.r.Int() }
+func (s *RandSource) Int8() int8   { return int8(s.r.Int32()) }
+func (s *RandSource) Int16() int16 { return int16(s.r.Int32()) }
+func (s *RandSource) Int32() int32 { return s.r.Int32() }
+func (s *RandSource) Int64() int64 { return s.r.Int64() }
+
+func (s *RandSource) Uint() uint       { return s.r.Uint() }
+func (s *RandSource) Uint8() uint8     { return uint8(s.r.Uint32()) }
+func (s *RandSource) Uint16() uint16   { return uint16(s.r.Uint32()) }
+func (s *RandSource) Uint32() uint32   { return s.r.Uint32() }
+func (s *RandSource) Uint64() uint64   { return s.r.Uint64() }
+func (s *RandSource) Uintptr() uintptr { return uintptr(s.r.Uint64()) }
+
+func (s *RandSource) Float32() float32 { return s.r.Float32() }
+func (s *RandSource) Float64() float64 { return s.r.Float64() }
