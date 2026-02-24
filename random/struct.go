@@ -1,6 +1,10 @@
 package random
 
-import "reflect"
+import (
+	"reflect"
+
+	"github.com/sariya23/vero/internal"
+)
 
 // Struct...
 // TODO: добавить генерацию всех полей
@@ -21,17 +25,15 @@ func Struct(objPtr any) {
 func recursiveGenerateFillValue(structValue reflect.Value) {
 	for i := 0; i < structValue.NumField(); i++ {
 		field := structValue.Field(i)
-		fieldType := structValue.Field(i).Type().Kind()
-		switch fieldType {
+		if !field.CanSet() {
+			continue
+		}
+		switch field.Type().Kind() {
 		case reflect.Bool:
-			if !field.CanSet() {
-				continue
-			}
-			field.Set(reflect.ValueOf(true))
+			structTag := structValue.Type().Field(i).Tag
+			v := internal.GenerateBool(string(structTag))
+			field.Set(reflect.ValueOf(v))
 		case reflect.Int:
-			if !field.CanSet() {
-				continue
-			}
 			field.Set(reflect.ValueOf(8))
 		case reflect.Int8:
 		case reflect.Int16:

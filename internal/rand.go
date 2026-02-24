@@ -2,16 +2,16 @@ package internal
 
 import (
 	"fmt"
-	"math/rand/v2"
+	mrand "math/rand/v2"
 	"time"
 )
 
 type RandSource struct {
-	r *rand.Rand
+	r *mrand.Rand
 }
 
 func NewRandSource() *RandSource {
-	r := rand.New(rand.NewPCG(uint64(time.Now().UnixNano()),
+	r := mrand.New(mrand.NewPCG(uint64(time.Now().UnixNano()),
 		uint64(time.Now().UnixNano()>>32)))
 	return &RandSource{r: r}
 }
@@ -122,3 +122,8 @@ func (s *RandSource) Uintptr() uintptr { return uintptr(s.r.Uint64()) }
 
 func (s *RandSource) Float32() float32 { return s.r.Float32() }
 func (s *RandSource) Float64() float64 { return s.r.Float64() }
+
+func (s *RandSource) Bool() bool {
+	i := s.IntRange(0, 1)
+	return i == 0
+}

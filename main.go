@@ -8,12 +8,7 @@ import (
 
 type S struct {
 	A int
-	b bool
-	T struct {
-		C struct {
-			QWW int
-		}
-	}
+	B bool
 }
 
 func main() {
