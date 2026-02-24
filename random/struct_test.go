@@ -12,12 +12,24 @@ type TestBoolOnlyTrue struct {
 	Field bool `rules:"only=true"`
 }
 
+type TestBoolWorkWithDifferentStructTags struct {
+	Field bool `rules:"only=true" json:"field"`
+}
+
 type TestBoolOnlyFalse struct {
 	Field bool `rules:"only=false"`
 }
 
 type TestBoolUnknownRuleValue struct {
 	Field bool `rules:"only=aboba"`
+}
+
+type TestBoolBothRules struct {
+	Field bool `rules:"only=true,only=false"`
+}
+
+type TestBoolRuleDuplicate struct {
+	Field bool `rules:"only=true,only=true"`
 }
 
 type TestBoolUnknownRuleName struct {
@@ -50,6 +62,21 @@ func TestStructBool(t *testing.T) {
 			name:     "BOOL: only true",
 			model:    TestBoolOnlyTrue{},
 			expected: TestBoolOnlyTrue{Field: true},
+		},
+		{
+			name:     "BOOL: duplicate rule",
+			model:    TestBoolRuleDuplicate{},
+			expected: TestBoolRuleDuplicate{Field: true},
+		},
+		{
+			name:     "BOOL: both rules",
+			model:    TestBoolBothRules{},
+			expected: nil,
+		},
+		{
+			name:     "BOOL: both rules",
+			model:    TestBoolWorkWithDifferentStructTags{},
+			expected: TestBoolWorkWithDifferentStructTags{Field: true},
 		},
 		{
 			name:     "BOOL: only false",
