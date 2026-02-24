@@ -2,9 +2,9 @@ package random
 
 import (
 	"reflect"
-
-	"github.com/sariya23/vero/internal"
 )
+
+const TagName = "rules"
 
 // Struct...
 // TODO: добавить генерацию всех полей
@@ -30,9 +30,7 @@ func recursiveGenerateFillValue(structValue reflect.Value) {
 		}
 		switch field.Type().Kind() {
 		case reflect.Bool:
-			structTag := structValue.Type().Field(i).Tag
-			v := internal.GenerateBool(string(structTag))
-			field.Set(reflect.ValueOf(v))
+			field.Set(reflect.ValueOf(false))
 		case reflect.Int:
 			field.Set(reflect.ValueOf(8))
 		case reflect.Int8:

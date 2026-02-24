@@ -8,7 +8,7 @@ import (
 
 type S struct {
 	A int
-	B bool
+	B bool `rules:"only=true"`
 }
 
 func main() {
