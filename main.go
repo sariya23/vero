@@ -7,8 +7,7 @@ import (
 )
 
 type S struct {
-	B bool `rules:"only=true"`
-	C bool
+	B bool `rules:"aboba="`
 }
 
 func main() {

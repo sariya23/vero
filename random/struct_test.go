@@ -3,12 +3,7 @@ package random
 import (
 	"reflect"
 	"testing"
-
-	"github.com/sariya23/vero/internal/rules"
 )
-
-type Any struct {
-}
 
 type TestBoolNoRules struct {
 	Field bool
@@ -35,55 +30,45 @@ type TestBoolInvalidTag struct {
 
 func TestStructBool(t *testing.T) {
 	t.Parallel()
-	intPtr := 8
 	cases := []struct {
-		name        string
-		structPtr   any
-		expected    any
-		expectedErr error
-		mustPanic   bool
+		name      string
+		model     any
+		expected  any
+		mustPanic bool
 	}{
 		{
 			name:      "argument not struct",
-			structPtr: &intPtr,
+			model:     8,
 			mustPanic: true,
 		},
 		{
-			name: "argument not pointer",
-			structPtr: struct {
-			}{},
+			name:     "BOOL: no rules",
+			model:    TestBoolNoRules{},
+			expected: nil,
+		},
+		{
+			name:     "BOOL: only true",
+			model:    TestBoolOnlyTrue{},
+			expected: TestBoolOnlyTrue{Field: true},
+		},
+		{
+			name:     "BOOL: only false",
+			model:    TestBoolOnlyFalse{},
+			expected: TestBoolOnlyFalse{Field: false},
+		},
+		{
+			name:      "BOOL: unknown rule value",
+			model:     TestBoolUnknownRuleValue{},
 			mustPanic: true,
 		},
 		{
-			name:      "BOOL: no rules",
-			structPtr: &TestBoolNoRules{},
-			expected:  Any{},
-		},
-		{
-			name:      "BOOL: only true",
-			structPtr: &TestBoolOnlyTrue{},
-			expected:  &TestBoolOnlyTrue{Field: true},
-		},
-		{
-			name:      "BOOL: only false",
-			structPtr: &TestBoolOnlyFalse{},
-			expected:  &TestBoolOnlyFalse{Field: false},
-		},
-		{
-			name:        "BOOL: unknown rule value",
-			structPtr:   &TestBoolUnknownRuleValue{},
-			expectedErr: rules.ErrUnknowBoolRuleValue,
-			expected:    &TestBoolUnknownRuleValue{},
-		},
-		{
-			name:        "BOOL: unknown rule name",
-			structPtr:   &TestBoolUnknownRuleName{},
-			expectedErr: rules.ErrUnknowBoolRuleName,
-			expected:    &TestBoolUnknownRuleName{},
+			name:      "BOOL: unknown rule name",
+			model:     TestBoolUnknownRuleName{},
+			mustPanic: true,
 		},
 		{
 			name:      "BOOL: invalid tag",
-			structPtr: &TestBoolInvalidTag{},
+			model:     TestBoolInvalidTag{},
 			mustPanic: true,
 		},
 	}
@@ -91,20 +76,16 @@ func TestStructBool(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			defer func() {
-				if r := recover(); r != nil {
-					if !tc.mustPanic {
-						t.Errorf("unexpected panic")
-					}
+				didPanic := recover() != nil
+				if didPanic != tc.mustPanic {
+					t.Errorf("expected that panic `%v`, got `%v`", tc.mustPanic, didPanic)
 				}
 			}()
-			err := Struct(tc.structPtr)
-			if tc.expectedErr != err {
-				t.Errorf("expected error %v, got %v", tc.expectedErr, err)
-			}
+			got := Struct(tc.model)
 
-			if !reflect.DeepEqual(tc.expected, Any{}) {
-				if !reflect.DeepEqual(tc.expected, tc.structPtr) {
-					t.Errorf("got %v, want %v", tc.structPtr, tc.expected)
+			if tc.expected != nil {
+				if !reflect.DeepEqual(got, tc.expected) {
+					t.Errorf("got %v, want %v", tc.model, tc.expected)
 				}
 			}
 		})
