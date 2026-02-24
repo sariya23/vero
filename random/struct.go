@@ -9,46 +9,28 @@ import (
 
 const TagName = "rules"
 
-// Struct...
-// TODO: добавить генерацию всех полей
-// TODO: вынести генерацию в internal
-func Struct(objPtr any) error {
-	value := reflect.ValueOf(objPtr)
-	if value.Kind() != reflect.Ptr {
-		panic("objPtr must be a pointer to struct")
+func Struct(s any) any {
+	t := reflect.TypeOf(s)
+	if t.Kind() != reflect.Struct {
+		panic("not struct")
 	}
+	structInstance := reflect.New(t).Elem()
 
-	if value.Elem().Kind() != reflect.Struct {
-		panic("objPtr must be a pointer to struct")
-	}
-
-	return recursiveGenerateFillValue(value.Elem())
+	recursiveGenerateFillValue(structInstance)
+	return structInstance.Interface()
 }
 
-func recursiveGenerateFillValue(structValue reflect.Value) error {
+func recursiveGenerateFillValue(structValue reflect.Value) {
 	for i := 0; i < structValue.NumField(); i++ {
 		field := structValue.Field(i)
 		if !field.CanSet() {
 			continue
 		}
+		ruleTags := structValue.Type().Field(i).Tag.Get(TagName)
 		switch field.Type().Kind() {
 		case reflect.Bool:
-			tags := strings.Split(structValue.Type().Field(i).Tag.Get(TagName), ",")
-			boolRules := make([]rules.BoolRule, 0, len(tags))
-			for _, structTag := range tags {
-				pair := strings.Split(structTag, "=")
-				if len(pair) != 2 {
-					continue
-				}
-				boolRule, err := rules.NewBoolRule(pair[0], pair[1])
-				if err != nil {
-					return err
-				}
-				boolRules = append(boolRules, boolRule)
-			}
-
-			boolRulesStruct := rules.NewBoolRules(boolRules)
-			generated := rules.GenerateBool(boolRulesStruct)
+			boolRules := buildBoolRules(ruleTags)
+			generated := rules.GenerateBool(boolRules)
 			field.Set(reflect.ValueOf(generated))
 		case reflect.Int:
 			field.Set(reflect.ValueOf(8))
@@ -75,12 +57,29 @@ func recursiveGenerateFillValue(structValue reflect.Value) error {
 		case reflect.Slice:
 		case reflect.String:
 		case reflect.Struct:
-			err := recursiveGenerateFillValue(field)
-			if err != nil {
-				return err
-			}
+			recursiveGenerateFillValue(field)
 		case reflect.UnsafePointer:
 		}
 	}
-	return nil
+}
+
+func buildBoolRules(tagString string) rules.BoolRules {
+	if tagString == "" {
+		return rules.BoolRules{}
+	}
+	allRules := strings.Split(tagString, ",")
+	boolRules := make([]rules.BoolRule, 0, len(allRules))
+	for _, r := range allRules {
+		pair := strings.Split(r, "=")
+		if len(pair) != 2 {
+			panic("invalid tag value")
+		}
+		boolRule, err := rules.NewBoolRule(pair[0], pair[1])
+		if err != nil {
+			panic(err)
+		}
+		boolRules = append(boolRules, boolRule)
+	}
+
+	return rules.NewBoolRules(boolRules)
 }

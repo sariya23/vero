@@ -7,15 +7,15 @@ import (
 )
 
 type S struct {
-	B bool `rules:""`
-	Q bool
+	B bool `rules:"only=true"`
+	C bool
 }
 
 func main() {
 	var s S
 
-	err := random.Struct(&s)
+	q := random.Struct(s).(S)
 
-	fmt.Println(err, s)
+	fmt.Println(q)
 
 }
