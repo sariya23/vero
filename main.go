@@ -3,18 +3,17 @@ package main
 import (
 	"fmt"
 
-	"github.com/sariya23/vero/random"
+	"github.com/brianvoe/gofakeit/v7"
 )
 
 type S struct {
-	B bool `rules:"only=true,only=true"`
+	Name string
 }
 
 func main() {
 	var s S
-
-	q := random.Struct(s).(S)
-
-	fmt.Println(q)
-
+	gofakeit.Struct(&s)
+	fmt.Println(s)
+	gofakeit.Struct(&s)
+	fmt.Println(s)
 }
