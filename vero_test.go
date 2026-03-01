@@ -1,119 +1,51 @@
 package main
 
-import (
-	"reflect"
-	"testing"
-)
+import "testing"
 
-type TestBoolNoRules struct {
-	Field bool
-}
-type TestBoolOnlyTrue struct {
-	Field bool `rules:"only=true"`
-}
-
-type TestBoolWorkWithDifferentStructTags struct {
-	Field bool `rules:"only=true" json:"field"`
-}
-
-type TestBoolOnlyFalse struct {
-	Field bool `rules:"only=false"`
-}
-
-type TestBoolUnknownRuleValue struct {
-	Field bool `rules:"only=aboba"`
-}
-
-type TestBoolBothRules struct {
-	Field bool `rules:"only=true,only=false"`
-}
-
-type TestBoolRuleDuplicate struct {
-	Field bool `rules:"only=true,only=true"`
-}
-
-type TestBoolUnknownRuleName struct {
-	Field bool `rules:"aboba=true"`
-}
-
-type TestBoolInvalidTag struct {
-	Field bool `rules:"aboba="`
-}
-
-func TestStructBool(t *testing.T) {
+func TestValidPair(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
-		name      string
-		model     any
-		expected  any
-		mustPanic bool
+		name     string
+		pair     []string
+		expected bool
 	}{
 		{
-			name:      "argument not struct",
-			model:     8,
-			mustPanic: true,
+			name:     "valid",
+			pair:     []string{"a", "b"},
+			expected: true,
 		},
 		{
-			name:     "BOOL: no rules",
-			model:    TestBoolNoRules{},
-			expected: nil,
+			name:     "no left part",
+			pair:     []string{"", "b"},
+			expected: false,
 		},
 		{
-			name:     "BOOL: only true",
-			model:    TestBoolOnlyTrue{},
-			expected: TestBoolOnlyTrue{Field: true},
+			name:     "no right part",
+			pair:     []string{"a", ""},
+			expected: false,
 		},
 		{
-			name:     "BOOL: duplicate rule",
-			model:    TestBoolRuleDuplicate{},
-			expected: TestBoolRuleDuplicate{Field: true},
+			name:     "no pair",
+			pair:     []string{"", ""},
+			expected: false,
 		},
 		{
-			name:     "BOOL: both rules",
-			model:    TestBoolBothRules{},
-			expected: nil,
+			name:     "nil",
+			pair:     nil,
+			expected: false,
 		},
 		{
-			name:     "BOOL: both rules",
-			model:    TestBoolWorkWithDifferentStructTags{},
-			expected: TestBoolWorkWithDifferentStructTags{Field: true},
-		},
-		{
-			name:     "BOOL: only false",
-			model:    TestBoolOnlyFalse{},
-			expected: TestBoolOnlyFalse{Field: false},
-		},
-		{
-			name:      "BOOL: unknown rule value",
-			model:     TestBoolUnknownRuleValue{},
-			mustPanic: true,
-		},
-		{
-			name:      "BOOL: unknown rule name",
-			model:     TestBoolUnknownRuleName{},
-			mustPanic: true,
-		},
-		{
-			name:      "BOOL: invalid tag",
-			model:     TestBoolInvalidTag{},
-			mustPanic: true,
+			name:     "to many value",
+			pair:     []string{"a", "b", "c"},
+			expected: false,
 		},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			defer func() {
-				didPanic := recover() != nil
-				if didPanic != tc.mustPanic {
-					t.Errorf("expected that panic `%v`, got `%v`", tc.mustPanic, didPanic)
-				}
-			}()
-			got := Struct(tc.model)
-
-			if tc.expected != nil {
-				if !reflect.DeepEqual(got, tc.expected) {
-					t.Errorf("got %v, want %v", tc.model, tc.expected)
-				}
+			got := validRule(tc.pair)
+			if got != tc.expected {
+				t.Errorf("got %v; expected %v", got, tc.expected)
 			}
 		})
 	}
