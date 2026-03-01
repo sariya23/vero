@@ -108,7 +108,7 @@ func TestStructBool(t *testing.T) {
 					t.Errorf("expected that panic `%v`, got `%v`", tc.mustPanic, didPanic)
 				}
 			}()
-			got := Struct(tc.model)
+			got := Generate(tc.model)
 
 			if tc.expected != nil {
 				if !reflect.DeepEqual(got, tc.expected) {

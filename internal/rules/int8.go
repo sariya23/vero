@@ -63,7 +63,7 @@ func GenerateInt8(rules Int8Rules) (int8, error) {
 	}
 
 	if rules.Min != nil && rules.Max != nil {
-		if rules.Min.Value < rules.Max.Value {
+		if rules.Min.Value > rules.Max.Value {
 			return 0, ErrInvalidInt8Range
 		}
 		return rand.Int8Range(rules.Min.Value, rules.Max.Value), nil

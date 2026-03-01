@@ -9,7 +9,7 @@ import (
 
 const TagName = "rules"
 
-func Struct(s any) any {
+func Generate(s any) any {
 	t := reflect.TypeOf(s)
 	if t.Kind() != reflect.Struct {
 		panic("not struct")

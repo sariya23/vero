@@ -27,14 +27,16 @@ func (s *RandSource) Int8Range(min, max int8) int8 {
 	if min > max {
 		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
 	}
-	return int8(s.r.Int32N(int32(max-min+1)) + int32(min))
+	n := int32(max) - int32(min) + 1
+	return int8(s.r.Int32N(n) + int32(min))
 }
 
 func (s *RandSource) Int16Range(min, max int16) int16 {
 	if min > max {
 		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
 	}
-	return int16(s.r.Int32N(int32(max-min+1)) + int32(min))
+	n := int32(max) - int32(min) + 1
+	return int16(s.r.Int32N(n) + int32(min))
 }
 
 func (s *RandSource) Int32Range(min, max int32) int32 {
