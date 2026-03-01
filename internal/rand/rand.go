@@ -6,126 +6,165 @@ import (
 	"time"
 )
 
-type RandSource struct {
+// Source is a source of pseudo-random numbers (wrapper around math/rand/v2.Rand).
+type Source struct {
 	r *mrand.Rand
 }
 
-func NewRandSource() *RandSource {
+// NewRandSource creates a new Source instance seeded from the current time.
+func NewRandSource() *Source {
 	r := mrand.New(mrand.NewPCG(uint64(time.Now().UnixNano()),
 		uint64(time.Now().UnixNano()>>32)))
-	return &RandSource{r: r}
+	return &Source{r: r}
 }
 
-func (s *RandSource) IntRange(min, max int) int {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// IntRange returns a random int in [from, to] inclusive. Panics if from > to.
+func (s *Source) IntRange(from, to int) int {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return s.r.IntN(max-min+1) + min
+	return s.r.IntN(to-from+1) + from
 }
 
-func (s *RandSource) Int8Range(min, max int8) int8 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Int8Range returns a random int8 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Int8Range(from, to int8) int8 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	n := int32(max) - int32(min) + 1
-	return int8(s.r.Int32N(n) + int32(min))
+	n := int32(to) - int32(from) + 1
+	return int8(s.r.Int32N(n) + int32(from))
 }
 
-func (s *RandSource) Int16Range(min, max int16) int16 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Int16Range returns a random int16 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Int16Range(from, to int16) int16 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	n := int32(max) - int32(min) + 1
-	return int16(s.r.Int32N(n) + int32(min))
+	n := int32(to) - int32(from) + 1
+	return int16(s.r.Int32N(n) + int32(from))
 }
 
-func (s *RandSource) Int32Range(min, max int32) int32 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Int32Range returns a random int32 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Int32Range(from, to int32) int32 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return s.r.Int32N(max-min+1) + min
+	return s.r.Int32N(to-from+1) + from
 }
 
-func (s *RandSource) Int64Range(min, max int64) int64 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Int64Range returns a random int64 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Int64Range(from, to int64) int64 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return s.r.Int64N(max-min+1) + min
+	return s.r.Int64N(to-from+1) + from
 }
 
-func (s *RandSource) UintRange(min, max uint) uint {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// UintRange returns a random uint in [from, to] inclusive. Panics if from > to.
+func (s *Source) UintRange(from, to uint) uint {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return s.r.UintN(max-min+1) + min
+	return s.r.UintN(to-from+1) + from
 }
 
-func (s *RandSource) Uint8Range(min, max uint8) uint8 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Uint8Range returns a random uint8 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Uint8Range(from, to uint8) uint8 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return uint8(s.r.Uint32N(uint32(max-min+1)) + uint32(min))
+	return uint8(s.r.Uint32N(uint32(to-from+1)) + uint32(from))
 }
 
-func (s *RandSource) Uint16Range(min, max uint16) uint16 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Uint16Range returns a random uint16 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Uint16Range(from, to uint16) uint16 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return uint16(s.r.Uint32N(uint32(max-min+1)) + uint32(min))
+	return uint16(s.r.Uint32N(uint32(to-from+1)) + uint32(from))
 }
 
-func (s *RandSource) Uint32Range(min, max uint32) uint32 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Uint32Range returns a random uint32 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Uint32Range(from, to uint32) uint32 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return s.r.Uint32N(max-min+1) + min
+	return s.r.Uint32N(to-from+1) + from
 }
 
-func (s *RandSource) Uint64Range(min, max uint64) uint64 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// Uint64Range returns a random uint64 in [from, to] inclusive. Panics if from > to.
+func (s *Source) Uint64Range(from, to uint64) uint64 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return s.r.Uint64N(max-min+1) + min
+	return s.r.Uint64N(to-from+1) + from
 }
 
-func (s *RandSource) UintptrRange(min, max uintptr) uintptr {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%d, %d]'", min, max))
+// UintptrRange returns a random uintptr in [from, to] inclusive. Panics if from > to.
+func (s *Source) UintptrRange(from, to uintptr) uintptr {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%d, %d]'", from, to))
 	}
-	return uintptr(s.r.Uint64N(uint64(max-min+1))) + min
+	return uintptr(s.r.Uint64N(uint64(to-from+1))) + from
 }
 
-func (s *RandSource) Float32Range(min, max float32) float32 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%f, %f]'", min, max))
+// Float32Range returns a random float32 in [from, to]. Panics if from > to.
+func (s *Source) Float32Range(from, to float32) float32 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%f, %f]'", from, to))
 	}
-	return min + s.r.Float32()*(max-min)
+	return from + s.r.Float32()*(to-from)
 }
 
-func (s *RandSource) Float64Range(min, max float64) float64 {
-	if min > max {
-		panic(fmt.Sprintf("invalid interval '[%f, %f]'", min, max))
+// Float64Range returns a random float64 in [from, to]. Panics if from > to.
+func (s *Source) Float64Range(from, to float64) float64 {
+	if from > to {
+		panic(fmt.Sprintf("invalid interval '[%f, %f]'", from, to))
 	}
-	return min + s.r.Float64()*(max-min)
+	return from + s.r.Float64()*(to-from)
 }
 
-func (s *RandSource) Int() int     { return s.r.Int() }
-func (s *RandSource) Int8() int8   { return int8(s.r.Int32()) }
-func (s *RandSource) Int16() int16 { return int16(s.r.Int32()) }
-func (s *RandSource) Int32() int32 { return s.r.Int32() }
-func (s *RandSource) Int64() int64 { return s.r.Int64() }
+// Int returns a random non-negative int.
+func (s *Source) Int() int { return s.r.Int() }
 
-func (s *RandSource) Uint() uint       { return s.r.Uint() }
-func (s *RandSource) Uint8() uint8     { return uint8(s.r.Uint32()) }
-func (s *RandSource) Uint16() uint16   { return uint16(s.r.Uint32()) }
-func (s *RandSource) Uint32() uint32   { return s.r.Uint32() }
-func (s *RandSource) Uint64() uint64   { return s.r.Uint64() }
-func (s *RandSource) Uintptr() uintptr { return uintptr(s.r.Uint64()) }
+// Int8 returns a random int8.
+func (s *Source) Int8() int8 { return int8(s.r.Int32()) }
 
-func (s *RandSource) Float32() float32 { return s.r.Float32() }
-func (s *RandSource) Float64() float64 { return s.r.Float64() }
+// Int16 returns a random int16.
+func (s *Source) Int16() int16 { return int16(s.r.Int32()) }
 
-func (s *RandSource) Bool() bool {
+// Int32 returns a random int32.
+func (s *Source) Int32() int32 { return s.r.Int32() }
+
+// Int64 returns a random int64.
+func (s *Source) Int64() int64 { return s.r.Int64() }
+
+// Uint returns a random uint.
+func (s *Source) Uint() uint { return s.r.Uint() }
+
+// Uint8 returns a random uint8.
+func (s *Source) Uint8() uint8 { return uint8(s.r.Uint32()) }
+
+// Uint16 returns a random uint16.
+func (s *Source) Uint16() uint16 { return uint16(s.r.Uint32()) }
+
+// Uint32 returns a random uint32.
+func (s *Source) Uint32() uint32 { return s.r.Uint32() }
+
+// Uint64 returns a random uint64.
+func (s *Source) Uint64() uint64 { return s.r.Uint64() }
+
+// Uintptr returns a random uintptr.
+func (s *Source) Uintptr() uintptr { return uintptr(s.r.Uint64()) }
+
+// Float32 returns a random float32 in [0, 1).
+func (s *Source) Float32() float32 { return s.r.Float32() }
+
+// Float64 returns a random float64 in [0, 1).
+func (s *Source) Float64() float64 { return s.r.Float64() }
+
+// Bool returns a random bool.
+func (s *Source) Bool() bool {
 	i := s.IntRange(0, 1)
 	return i == 0
 }

@@ -88,7 +88,7 @@ func (m *mockTB) FailNow() {
 	m.failedNowCalled = true
 }
 
-func (m *mockTB) Error(_ ...interface{}) {
+func (*mockTB) Error(_ ...interface{}) {
 
 }
 

@@ -135,9 +135,7 @@ func TestGenerateInt8_NoRules(t *testing.T) {
 	if err != nil {
 		t.Errorf("expected no error, got: %v", err)
 	}
-	if got < math.MinInt8 || got > math.MaxInt8 {
-		t.Error("int8 greater that min and max value for this type")
-	}
+	_ = got
 }
 
 func TestGenerateInt8_WithRules_InRange(t *testing.T) {
