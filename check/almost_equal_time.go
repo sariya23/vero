@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sariya23/vero/internal"
+	"github.com/sariya23/vero/internal/diff"
 )
 
 // AssertAlmostEqualTime is a function that compares two time values, time1 and time2,
@@ -23,7 +23,7 @@ func AssertAlmostEqualTime(t testing.TB, time1, time2 time.Time, precision time.
 		isAlmostEqual = time2.Sub(time1) < precision
 	}
 	if !isAlmostEqual {
-		t.Error(internal.ShowDiffAlmostEqualTime(time1, time2, precision))
+		t.Error(diff.ShowDiffAlmostEqualTime(time1, time2, precision))
 		return false
 	}
 	return true
